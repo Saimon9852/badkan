@@ -16,7 +16,7 @@ int sqr(int x) {
     return x*x*x;   // a deliberate bug (it should be: x*x)
 }
 
-int round(double x) {
+int rond(double x) {
     return int(x);  // a deliberate bug (it should be: int(x+0.5)).
 }
 
@@ -52,10 +52,10 @@ int main() {
     TestCase("Test int operators", cerr)
             .check_equal(5,5)                  // check operator ==. Here there is no bug.
             .check_different(5,6)              // check operator !=. Here there is no bug.
-            //.check_function(sqr, 1, 1)         // check a function int->int.     Here there is no bug.
-            //.check_function(sqr, 5, 25)        // check a function int->int.    Here there is a bug.
-            //.check_function(round, 5.3, 5)     // check a function double->int. Here there is no bug.
-            //.check_function(round, 5.8, 6)     // check a function double->int. Here there is a bug.
+            .check_function(sqr, 1, 1)         // check a function int->int.     Here there is no bug.
+            .check_function(sqr, 5, 25)        // check a function int->int.    Here there is a bug.
+            .check_function(rond, 5.3, 5)     // check a function double->int. Here there is no bug.
+            .check_function(rond, 5.8, 6)     // check a function double->int. Here there is a bug.
             .check_output(5, "5")     // check output operator <<
             .print();
 
@@ -63,8 +63,8 @@ int main() {
             .check_equal(MyStruct(5), MyStruct(5))      // Here there is a bug.
             .check_different(MyStruct(5), MyStruct(6))  // Here there is no bug.
             .check_output(MyStruct(5), "MyStruct(5)")   // Here there is a bug.
-            //.check_function(getNum, MyStruct(5), 5)     // Here there is a bug.
-            //.check_function([](const MyStruct& s){return s.myNum();}, MyStruct(5), 5) // Here there is a bug.
+            .check_function(getNum, MyStruct(5), 5)     // Here there is a bug.
+            .check_function([](const MyStruct& s){return s.myNum();}, MyStruct(5), 5) // Here there is a bug.
             .print();
 }
 

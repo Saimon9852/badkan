@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 class TestCase {
@@ -8,44 +9,58 @@ private:
     int passedTests;
     int count;
     int failedTests;
-    ostream err;
+    ostream* err;
 public:
      TestCase(string name,ostream& error);
+     void print();
 
     template<typename T>
-     TestCase check_equal(T b,T a){
+     TestCase check_equal(const T& b,const T& a){
          count++;
-         if(b!=a)  err << testName << ": Failure in test #" << count << ": " << b << "should equal " << a << endl;
+         if((T)b==(T)a)
+             passedTests++;
+        else {
+             failedTests++;
+             *err << testName << ": Failure in test #" << count << ": " << b << " should equal " << a << endl;
+         }
          return *this;
     }
 
     template<typename T>
-    TestCase check_different(T b,T a){
+    TestCase check_different(const T& b,const T& a){
         count++;
-        if(b==a) err<< err << testName << ": Failure in test #" << count << ": " << b << "should be different" << a << endl;
+        if((T)b==(T)a){failedTests++;  *err << testName << ": Failure in test #" << count << ": " << b << " should be different" << a << endl;}
+        else passedTests++;
         return *this;
     }
 
     template<typename T>
-    TestCase check_output(T a,string test){
+    TestCase check_output(const T& a,const string& test){
         count++;
-        ostream holder;
+        ostringstream holder;
         holder << a;
-        if(holder.str() != test)
-            err << testName << ": Failure in test #" << count << ": string value should be " << test << "but  is returned " << holder.str() << endl;
+        if(holder.str() != test) {
+            *err << testName << ": Failure in test #" << count << ": string value should be " << test << " but  is "
+                 << holder.str() << endl;
+            failedTests++;
+        } else
+            passedTests++;
         return *this;
     }
 
-    template<typename T,typename G>
-    TestCase check_function(T arg,G exep){
+    template<typename T,typename G,typename O>
+    TestCase check_function(G f,const T& arg,const O& exep){
             count++;
-            G tes = f(arg);
-            if(tes != exep)
-                err << testName << ": Failure in test #" << count << ": Function should return " << exep << "but returned " << tes << endl;
+            O tes = f(arg);
+            if((O)tes != (O)exep) {
+                *err << testName << ": Failure in test #" << count << ": Function should return " << exep
+                     << " but returned " << tes << endl;
+                failedTests++;
+            }
+            else
+                passedTests++;
             return *this;
     }
 
-    void print(){
 
-    }
 };

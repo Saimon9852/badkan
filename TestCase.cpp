@@ -4,9 +4,10 @@ TestCase:: TestCase(string name,ostream& error){
     count = 0;
     failedTests =0;
     testName = name;
-    err = error;
+    err = &error;
 }
 
-TestCase:: print(){
+void TestCase:: print(){
+    *err << testName << ": " << failedTests << " failed, " << passedTests << " passed, "<< count << " total." << endl;
 
 }
