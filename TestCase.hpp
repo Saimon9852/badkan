@@ -15,7 +15,7 @@ public:
      void print();
 
     template<typename T>
-     TestCase check_equal(const T& b,const T& a){
+     TestCase& check_equal(const T& b,const T& a){
          count++;
          if((T)b==(T)a)
              passedTests++;
@@ -27,7 +27,7 @@ public:
     }
 
     template<typename T>
-    TestCase check_different(const T& b,const T& a){
+    TestCase& check_different(const T& b,const T& a){
         count++;
         if((T)b==(T)a){failedTests++;  *err << testName << ": Failure in test #" << count << ": " << b << " should be different" << a << endl;}
         else passedTests++;
@@ -35,7 +35,7 @@ public:
     }
 
     template<typename T>
-    TestCase check_output(const T& a,const string& test){
+    TestCase& check_output(const T& a,const string& test){
         count++;
         ostringstream holder;
         holder << a;
@@ -49,7 +49,7 @@ public:
     }
 
     template<typename T,typename G,typename O>
-    TestCase check_function(G f,const T& arg,const O& exep){
+    TestCase& check_function(G f,const T& arg,const O& exep){
             count++;
             O tes = f(arg);
             if((O)tes != (O)exep) {
